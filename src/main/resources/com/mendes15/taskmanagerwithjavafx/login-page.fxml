@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox prefHeight="600.0" prefWidth="800.0" alignment="CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mendes15.taskmanagerwithjavafx.controller.LoginController" stylesheets="@styles.css">
+    <VBox styleClass="card">
+        <VBox fx:id="usernameStep" spacing="8.0" fillWidth="false">
+            <Label>Login with username or email</Label>
+            <TextField fx:id="txtUsername" promptText="Username" onKeyPressed="#handleChangeUsername" prefWidth="250"/>
+            <TextField fx:id="txtEmail" promptText="Email" onKeyPressed="#handleChangeEmail" prefWidth="250"/>
+            <Hyperlink text="Don't have an account? Register here" onAction="#handleNavigateToRegister"/>
+            <Button text="Next" prefWidth="100" onAction="#handleNext"/>
+        </VBox>
+        <VBox fx:id="passwordStep" spacing="8.0" fillWidth="false" visible="false" managed="false">
+            <Label>Your password:</Label>
+            <PasswordField fx:id="txtPassword" promptText="Password" prefWidth="250"/>
+            <Button text="Login" prefWidth="100" onAction="#handleLogin"/>
+            <Hyperlink text="Forgot my password" onAction="#handleForgotPassword"/>
+        </VBox>
+    </VBox>
+</VBox>
