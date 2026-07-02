@@ -26,8 +26,7 @@ public class UserRepository implements CrudInterface<User> {
 
     @Override
     public User getById(int id) {
-        return userDAO.getById(id)
-                .orElseThrow(() -> new NotFoundException("User not found.", 404));
+        return userDAO.getById(id);
     }
 
     @Override
