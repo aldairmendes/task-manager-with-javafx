@@ -1,5 +1,6 @@
 package com.mendes15.taskmanagerwithjavafx.dao;
 
+import com.mendes15.taskmanagerwithjavafx.interfaces.CrudInterface;
 import com.mendes15.taskmanagerwithjavafx.model.User;
 import com.mendes15.taskmanagerwithjavafx.model.UserBuilder;
 import com.mendes15.taskmanagerwithjavafx.util.DatabaseConnection;
@@ -13,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class UserDAO {
-
+public class UserDAO implements CrudInterface<User> {
+    @Override
     public void save(User user) {
         String sql = "INSERT INTO users (username, email, pwd) VALUES (?, ?, ?)";
 
@@ -41,6 +42,7 @@ public class UserDAO {
         }
     }
 
+    @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT id, username, email FROM users";
@@ -64,7 +66,8 @@ public class UserDAO {
         return users;
     }
 
-    public Optional<User> getById(int id) {
+    @Override
+    public User getById(int id) {
         String sql = "SELECT username, email FROM users WHERE id = ?";
 
         try (Connection con = DatabaseConnection.getConnection()) {
@@ -72,20 +75,23 @@ public class UserDAO {
             PreparedStatement pstm = con.prepareStatement(sql);
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
+
+            User user = null;
             if (rs.next()) {
-                User user = new UserBuilder()
+                user = new UserBuilder()
                         .withId(id)
                         .withUsername(rs.getString("username"))
                         .withEmail(rs.getString("email"))
                         .build();
-                return Optional.of(user);
             }
+            return user;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("SQL Error on getById user: " + e.getMessage());
+            throw new RuntimeException("Error finding user by ID.", e);
         }
-        return Optional.empty();
     }
 
+    @Override
     public void update(int id, String[] fields, Object[] values) {
 
         if (fields == null || values == null || fields.length != values.length) {
@@ -117,6 +123,7 @@ public class UserDAO {
         }
     }
 
+    @Override
     public void delete(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
 
